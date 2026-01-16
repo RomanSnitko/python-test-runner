@@ -1,11 +1,11 @@
 from pathlib import Path
 
 from cli import parse_args
-from test_case import TestCase
-from executor import execute
-from comparator import compare
-from reporter import TestReport, print_report
-from errors import InvalidTestDirectory
+from runner.test_case import TestCase
+from runner.executor import execute
+from runner.comparator import compare
+from runner.reporter import TestReport, print_report
+from runner.errors import InvalidTestDirectory
 
 
 def main():
