@@ -1,12 +1,9 @@
 # python-test-runner
-Инструмент автоматизации тестирования нативных бинарных файлов (C/C++). Предназначен для оркестрации процессов, валидации стандартных потоков ввода/вывода (stdout/stderr) и контроля потребления ресурсов (Time Limits). Реализует чистую архитектуру с разделением ответственности между запуском процессов, сравнением данных и генерацией отчетов.
+Each test case is represented by a set of input and expected-output files. The test runner launches the target executable as an isolated subprocess, redirects its standard streams, enforces a configurable execution timeout, and captures stdout and stderr without decoding the raw byte streams. The resulting output is compared against the expected data together with the process exit code.
 
-## Features
-* Process Orchestration: Безопасный запуск бинарных файлов через subprocess с жестким контролем времени выполнения (Timeout Handling).
-* Stream Validation: Побайтовое сравнение stdout и stderr с эталонными данными, валидация кодов возврата (Exit Codes).
-* Zero-Dependency: Полностью построен на стандартной библиотеке Python (Type Hints, Dataclasses, Pathlib), не требует pip install.
-* Isolation: Каждый тест запускается в изолированном процессе, падение бинарника не ломает процесс тестирования.
-* Structured Reporting: Агрегация результатов тестирования с детализацией причин падения (Runtime Error, TLE, Mismatch).
+The execution layer is isolated from the comparison and reporting logic. A dedicated test-case loader converts filesystem-based test definitions into immutable data objects, the executor manages subprocess lifecycle and timeout handling, the comparator performs deterministic output validation, and the reporter aggregates individual results into structured pass/fail information with explicit failure causes such as output mismatch, runtime error, or timeout.
+
+The runner relies exclusively on the Python standard library, using subprocess and process signals for execution control, dataclasses for test-case representation, and pathlib for filesystem operations. The modular design keeps process management, validation, error handling, and CLI orchestration independent, allowing the runner to execute arbitrary native binaries without coupling the framework to a specific target language or build system.
 
 ## Tech Stack
 * Core: Python 3.10+ (Modern Syntax).
